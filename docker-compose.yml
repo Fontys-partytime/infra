@@ -1,6 +1,76 @@
 version: "3.8"
 
 services:
+
+  # joined:
+  #   build:
+  #     context: .././Partytime.Joined
+  #     dockerfile: Dockerfile
+  #   container_name: partytime-joined-service
+  #   hostname: partytime-joined-service
+  #   expose:
+  #     - 80
+  #   depends_on:
+  #     - rabbitmq
+  #   networks:
+  #     - Partytime
+  
+  # Authentication
+  authenticationwebapi:
+    container_name: authentication-webapi
+    build:
+      context: .././Partytime.Authentication/AuthenticationWebApi
+      dockerfile: Dockerfile
+    networks:
+      - Partytime
+    
+  # Party service & DB
+  party:
+    build:
+      context: .././Partytime.Party
+      dockerfile: Dockerfile
+    container_name: partytime-party-service
+    hostname: partytime-party-service
+    expose:
+      - 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+    environment:
+      - ConnectionString=host=localhost;port=5435;database=party;username=tommie;password=Rfec7Fo81YchjyUu;Pooling=true;
+    networks:
+      - Partytime
+
+  party_postgresql:
+    image: postgres:15.3-alpine
+    container_name: party_postgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=tommie
+      - POSTGRES_PASSWORD=Rfec7Fo81YchjyUu
+      - POSTGRES_DB=party
+    ports:
+      - '5432:5432'
+    volumes: 
+      - party_postgresql:/var/lib/postgresql/data
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    networks:
+      - Partytime
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
+        PGADMIN_DEFAULT_PASSWORD: "test123!"
+    ports:
+        - "16543:80"
+    depends_on:
+        - party_postgresql
+    networks:
+      - Partytime
+
+  # Messaging
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
@@ -10,6 +80,26 @@ services:
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
     hostname: rabbitmq
+    networks:
+      - Partytime
+
+  apigateway:
+    build:
+      context: .././ApiGateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    hostname: api-gateway
+    ports: 
+      - "8001:80"
+    networks:
+      - Partytime
+
+networks:
+  Partytime:
 
 volumes:
-  rabbitmqdata: 
+  rabbitmqdata:
+  party_postgresql:
+  party:
+  authenticationwebapi:
+  # joined:
