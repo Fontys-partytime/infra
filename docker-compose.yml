@@ -2,27 +2,48 @@ version: "3.8"
 
 services:
 
-  # joined:
-  #   build:
-  #     context: .././Partytime.Joined
-  #     dockerfile: Dockerfile
-  #   container_name: partytime-joined-service
-  #   hostname: partytime-joined-service
-  #   expose:
-  #     - 80
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - Partytime
-  
-  # Authentication
-  authenticationwebapi:
-    container_name: authentication-webapi
+  # Joined service & DB
+  joined:
     build:
-      context: .././Partytime.Authentication/AuthenticationWebApi
+      context: .././Partytime.Joined
       dockerfile: Dockerfile
+    container_name: partytime-joined-service
+    hostname: partytime-joined-service
+    ports:
+      - "5004:5004"
+    depends_on:
+    - rabbitmq
+    - joinedpostgresql
     networks:
       - Partytime
+
+  joinedpostgresql:
+    image: postgres:15.3-alpine
+    container_name: joinedpostgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=tommie
+      - POSTGRES_PASSWORD=FHk562I6jRC78U9q
+      - POSTGRES_DB=joined
+    ports:
+      - '5433:5432'
+    volumes:
+      - joinedpostgresql:/var/lib/postgresql/data
+      - ./docker_postgres_joined.sql:/docker-entrypoint-initdb.d/docker_postgres_joined.sql 
+    networks:
+      - Partytime
+  
+  pgadmin-join-compose:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
+        PGADMIN_DEFAULT_PASSWORD: "test123!"
+    ports:
+        - "16545:80"
+    depends_on:
+        - joinedpostgresql
+    networks:
+      - Partytime  
     
   # Party service & DB
   party:
@@ -31,20 +52,17 @@ services:
       dockerfile: Dockerfile
     container_name: partytime-party-service
     hostname: partytime-party-service
-    expose:
-      - 5000
     ports:
       - "5000:5000"
     depends_on:
       - rabbitmq
-    environment:
-      - ConnectionString=host=localhost;port=5435;database=party;username=tommie;password=Rfec7Fo81YchjyUu;Pooling=true;
+      - partypostgresql
     networks:
       - Partytime
 
-  party_postgresql:
+  partypostgresql:
     image: postgres:15.3-alpine
-    container_name: party_postgresql
+    container_name: partypostgresql
     restart: always
     environment:
       - POSTGRES_USER=tommie
@@ -53,7 +71,7 @@ services:
     ports:
       - '5432:5432'
     volumes: 
-      - party_postgresql:/var/lib/postgresql/data
+      - partypostgresql:/var/lib/postgresql/data
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
     networks:
       - Partytime
@@ -66,23 +84,22 @@ services:
     ports:
         - "16543:80"
     depends_on:
-        - party_postgresql
+        - partypostgresql
     networks:
       - Partytime
 
-  # Messaging
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
-    hostname: rabbitmq
+  # Authentication
+  authenticationwebapi:
+    build:
+      context: .././Partytime.Authentication
+      dockerfile: Dockerfile
+    container_name: authentication-webapi
+    ports: 
+    - 80
     networks:
       - Partytime
 
+  # Gateway
   apigateway:
     build:
       context: .././ApiGateway
@@ -94,12 +111,27 @@ services:
     networks:
       - Partytime
 
+  # Messaging
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+    networks:
+      - Partytime
+
 networks:
   Partytime:
 
 volumes:
-  rabbitmqdata:
-  party_postgresql:
   party:
+  partypostgresql:
+  joined:
+  joinedpostgresql:
   authenticationwebapi:
-  # joined:
+  rabbitmqdata:
+  rabbitmq:
