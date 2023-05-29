@@ -25,14 +25,15 @@ spec:
         io.kompose.service: party
     spec:
       containers:
-        - env:
-            - name: ConnectionString
-              value: host=localhost;port=5435;database=party;username=tommie;password=Rfec7Fo81YchjyUu;Pooling=true;
-          image: party
-          name: partytime-party-service
+        - name: party
+        - image: partytimecontainerregistry.azurecr.io/party:latest
+          imagePullPolicy: IfNotPresent
+          name: party
           ports:
             - containerPort: 5000
           resources: {}
-      hostname: partytime-party-service
+      imagePullSecrets:
+        - name: partytimesecret
+      hostname: party
       restartPolicy: Always
 status: {}

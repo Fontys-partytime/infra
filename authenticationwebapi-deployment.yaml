@@ -25,10 +25,14 @@ spec:
         io.kompose.service: authenticationwebapi
     spec:
       containers:
-        - image: authenticationwebapi
-          name: authentication-webapi
+        - name: authentication
+        - image: partytimecontainerregistry.azurecr.io/authentication:latest
+          imagePullPolicy: IfNotPresent
+          name: authentication
           ports:
             - containerPort: 80
           resources: {}
+      imagePullSecrets:
+        - name: partytimesecret
       restartPolicy: Always
 status: {}

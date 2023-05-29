@@ -4,6 +4,7 @@ services:
 
   # Joined service & DB
   joined:
+    image: partytimecontainerregistry.azurecr.io/joined
     build:
       context: .././Partytime.Joined
       dockerfile: Dockerfile
@@ -47,6 +48,7 @@ services:
     
   # Party service & DB
   party:
+    image: partytimecontainerregistry.azurecr.io/party
     build:
       context: .././Partytime.Party
       dockerfile: Dockerfile
@@ -90,6 +92,7 @@ services:
 
   # Authentication
   authenticationwebapi:
+    image: partytimecontainerregistry.azurecr.io/authentication
     build:
       context: .././Partytime.Authentication
       dockerfile: Dockerfile
@@ -101,6 +104,7 @@ services:
 
   # Gateway
   apigateway:
+    image: partytimecontainerregistry.azurecr.io/apigateway
     build:
       context: .././ApiGateway
       dockerfile: Dockerfile

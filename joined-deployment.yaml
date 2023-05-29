@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: apigateway
-  name: apigateway
+    io.kompose.service: joined
+  name: joined
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: apigateway
+      io.kompose.service: joined
   strategy: {}
   template:
     metadata:
@@ -22,18 +22,18 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.network/partytimeinfra-partytime: "true"
-        io.kompose.service: apigateway
+        io.kompose.service: joined
     spec:
       containers:
-        - name: apigateway
-        - image: partytimecontainerregistry.azurecr.io/apigateway:latest
-          name: apigateway
+        - name: joined
+        - image: partytimecontainerregistry.azurecr.io/joined:latest
           imagePullPolicy: IfNotPresent
+          name: joined
           ports:
-            - containerPort: 80
+            - containerPort: 5004
           resources: {}
       imagePullSecrets:
         - name: partytimesecret
-      hostname: apigateway
+      hostname: joined
       restartPolicy: Always
 status: {}
