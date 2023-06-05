@@ -6,23 +6,23 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-    - host: apigateway.info
+    - host: partytime-apigateway.info
       http:
         paths:
-          - path: /
+          - path: /apigateway
             pathType: Prefix
             backend:
               service:
                 name: apigateway
                 port:
                   number: 8001
-    - host: party.info
+    - host: partytime-frontend.info
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: party
+                name: frontend
                 port:
-                  number: 5000
+                  number: 3000

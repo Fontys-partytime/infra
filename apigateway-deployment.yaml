@@ -30,7 +30,7 @@ spec:
           name: apigateway
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8001
           resources: {}
       imagePullSecrets:
         - name: partytimesecret
