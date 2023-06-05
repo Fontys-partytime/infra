@@ -27,11 +27,11 @@ spec:
       containers:
         - name: joined
         - image: partytimecontainerregistry.azurecr.io/joined:latest
-          imagePullPolicy: Always
-          name: joined
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5004
           resources: {}
+          name: joined
       imagePullSecrets:
         - name: partytimesecret
       hostname: joined

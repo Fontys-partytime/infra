@@ -27,10 +27,10 @@ spec:
       containers:
         - name: frontend
         - image: partytimecontainerregistry.azurecr.io/frontend
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: frontend
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           resources: {}
       hostname: frontend
       imagePullSecrets:

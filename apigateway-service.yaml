@@ -12,9 +12,8 @@ spec:
   ports:
     - name: "8001"
       port: 8001
-      targetPort: 80
+      targetPort: 8001
       protocol: TCP
-      nodePort: 30007
   selector:
     io.kompose.service: apigateway
   type: NodePort

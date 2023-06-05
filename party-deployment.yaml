@@ -27,7 +27,7 @@ spec:
       containers:
         - name: party
         - image: partytimecontainerregistry.azurecr.io/party:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: party
           ports:
             - containerPort: 5000
