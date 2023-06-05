@@ -27,7 +27,7 @@ spec:
       containers:
         - name: authentication
         - image: partytimecontainerregistry.azurecr.io/authentication:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: authentication
           ports:
             - containerPort: 80
