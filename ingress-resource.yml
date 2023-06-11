@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: www.partytime.com
+  - host: localhost
     http:
       paths:
       - path: /api(/|$)(.*)
@@ -22,9 +22,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-frontend
+  annotations:
 spec:
   rules:
-  - host: www.partytime.com
+  - host: localhost
     http:
       paths:
       - path: /
