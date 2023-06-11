@@ -12,7 +12,7 @@ spec:
   ports:
     - name: "8001"
       port: 8001
-      targetPort: 80
+      targetPort: 8001
       protocol: TCP
   selector:
     io.kompose.service: apigateway
