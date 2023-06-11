@@ -25,10 +25,9 @@ spec:
         io.kompose.service: party
     spec:
       containers:
-        - name: party
         - image: partytimecontainerregistry.azurecr.io/party:latest
-          imagePullPolicy: Always
           name: party
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           resources: {}

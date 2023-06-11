@@ -25,12 +25,14 @@ spec:
         io.kompose.service: frontend
     spec:
       containers:
-        - name: frontend
-        - image: partytimecontainerregistry.azurecr.io/frontend
-          imagePullPolicy: Always
+        - image: partytimecontainerregistry.azurecr.io/frontend:latest
           name: frontend
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
+          env:
+          - name: BACKEND_URL
+            value: "/gateway"
           resources: {}
       hostname: frontend
       imagePullSecrets:

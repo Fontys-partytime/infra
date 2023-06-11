@@ -8,8 +8,8 @@ services:
     build:
       context: .././Partytime.Joined
       dockerfile: Dockerfile
-    container_name: partytime-joined-service
-    hostname: partytime-joined-service
+    container_name: joined
+    hostname: joined
     ports:
       - "5004:5004"
     depends_on:
@@ -52,8 +52,8 @@ services:
     build:
       context: .././Partytime.Party
       dockerfile: Dockerfile
-    container_name: partytime-party-service
-    hostname: partytime-party-service
+    container_name: party
+    hostname: party
     ports:
       - "5000:5000"
     depends_on:
@@ -92,24 +92,42 @@ services:
 
   # Authentication
   authenticationwebapi:
-    image: partytimecontainerregistry.azurecr.io/authentication
+    #image: partytimecontainerregistry.azurecr.io/authentication
     build:
       context: .././Partytime.Authentication
       dockerfile: Dockerfile
-    container_name: authentication-webapi
+    container_name: authentication
+    hostname: authenticationwebapi
+    # depends_on:
+    #   - userpostgresql
     ports: 
     - 80
     networks:
       - Partytime
 
+  # userpostgresql:
+  #   image: postgres:15.3-alpine
+  #   container_name: userpostgresql
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER=tomoli
+  #     - POSTGRES_PASSWORD=34Bn473OaN76qBT7
+  #     - POSTGRES_DB=users
+  #   ports:
+  #     - '5435:5432'
+  #   volumes: 
+  #     - userpostgresql:/var/lib/postgresql/data
+  #     - ./docker_postgres_init_users.sql:/docker-entrypoint-initdb.d/docker_postgres_init_users.sql
+  #   networks:
+  #     - Partytime
+
   # Gateway
   apigateway:
-    image: partytimecontainerregistry.azurecr.io/apigateway
     build:
       context: .././ApiGateway
       dockerfile: Dockerfile
-    container_name: api-gateway
-    hostname: api-gateway
+    container_name: apigateway
+    hostname: apigateway
     ports: 
       - "8001:80"
     networks:
@@ -137,5 +155,6 @@ volumes:
   joined:
   joinedpostgresql:
   authenticationwebapi:
+  #userpostgresql:
   rabbitmqdata:
   rabbitmq:

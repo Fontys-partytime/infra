@@ -21,16 +21,14 @@ spec:
         kompose.version: 1.28.0 (c4137012e)
       creationTimestamp: null
       labels:
-        io.kompose.network/partytimeinfra-partytime: "true"
         io.kompose.service: apigateway
     spec:
       containers:
-        - name: apigateway
         - image: partytimecontainerregistry.azurecr.io/apigateway:latest
           name: apigateway
           imagePullPolicy: Always
           ports:
-            - containerPort: 8001
+            - containerPort: 80
           resources: {}
       imagePullSecrets:
         - name: partytimesecret
