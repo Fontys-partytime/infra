@@ -33,18 +33,6 @@ services:
       - ./docker_postgres_joined.sql:/docker-entrypoint-initdb.d/docker_postgres_joined.sql 
     networks:
       - Partytime
-  
-  pgadmin-join-compose:
-    image: dpage/pgadmin4
-    environment:
-        PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
-        PGADMIN_DEFAULT_PASSWORD: "test123!"
-    ports:
-        - "16545:80"
-    depends_on:
-        - joinedpostgresql
-    networks:
-      - Partytime  
     
   # Party service & DB
   party:
@@ -78,18 +66,6 @@ services:
     networks:
       - Partytime
 
-  pgadmin-compose:
-    image: dpage/pgadmin4
-    environment:
-        PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
-        PGADMIN_DEFAULT_PASSWORD: "test123!"
-    ports:
-        - "16543:80"
-    depends_on:
-        - partypostgresql
-    networks:
-      - Partytime
-
   # Authentication
   authenticationwebapi:
     #image: partytimecontainerregistry.azurecr.io/authentication
@@ -105,24 +81,25 @@ services:
     networks:
       - Partytime
 
-  # userpostgresql:
-  #   image: postgres:15.3-alpine
-  #   container_name: userpostgresql
-  #   restart: always
-  #   environment:
-  #     - POSTGRES_USER=tomoli
-  #     - POSTGRES_PASSWORD=34Bn473OaN76qBT7
-  #     - POSTGRES_DB=users
-  #   ports:
-  #     - '5435:5432'
-  #   volumes: 
-  #     - userpostgresql:/var/lib/postgresql/data
-  #     - ./docker_postgres_init_users.sql:/docker-entrypoint-initdb.d/docker_postgres_init_users.sql
-  #   networks:
-  #     - Partytime
+  userpostgresql:
+    image: postgres:15.3-alpine
+    container_name: userpostgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=tomoli
+      - POSTGRES_PASSWORD=34Bn473OaN76qBT7
+      - POSTGRES_DB=users
+    ports:
+      - '5435:5432'
+    volumes: 
+      - userpostgresql:/var/lib/postgresql/data
+      - ./docker_postgres_init_users.sql:/docker-entrypoint-initdb.d/docker_postgres_init_users.sql
+    networks:
+      - Partytime
 
   # Gateway
   apigateway:
+    #image: partytimecontainerregistry.azurecr.io/authentication
     build:
       context: .././ApiGateway
       dockerfile: Dockerfile

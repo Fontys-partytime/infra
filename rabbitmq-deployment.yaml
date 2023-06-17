@@ -31,7 +31,12 @@ spec:
           ports:
             - containerPort: 5672
             - containerPort: 15672
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "64Mi"
           volumeMounts:
             - mountPath: /var/lib/rabbitmq
               name: rabbitmqdata

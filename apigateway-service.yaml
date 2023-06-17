@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: apigateway
   name: apigateway
 spec:
+  type: ClusterIP
   ports:
     - name: "8001"
       port: 80

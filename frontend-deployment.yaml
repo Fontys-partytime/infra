@@ -30,7 +30,12 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "64Mi"
       hostname: frontend
       imagePullSecrets:
         - name: partytimesecret

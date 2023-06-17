@@ -5,7 +5,7 @@ CREATE TABLE users
     Username text NOT NULL,
     Password text NOT NULL,
     Email text NOT NULL,
-    Role text
+    Role text NOT NULL DEFAULT 'User'
 );
 
 INSERT INTO users(Username, Password, Email, Role) VALUES

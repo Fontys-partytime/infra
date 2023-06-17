@@ -29,7 +29,12 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8001
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "64Mi"
       imagePullSecrets:
         - name: partytimesecret
       hostname: apigateway
