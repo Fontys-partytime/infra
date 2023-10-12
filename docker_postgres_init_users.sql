@@ -7,6 +7,3 @@ CREATE TABLE users
     Email text NOT NULL,
     Role text NOT NULL DEFAULT 'User'
 );
-
-INSERT INTO users(Username, Password, Email, Role) VALUES
- ('TommieOlislagers', 'Test12345!', '457616@student.fontys.nl', 'Administrator');

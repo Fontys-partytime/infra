@@ -4,7 +4,7 @@ services:
 
   # Joined service & DB
   joined:
-    image: partytimecontainerregistry.azurecr.io/joined
+    #image: partytimecontainerregistry.azurecr.io/joined
     build:
       context: .././Partytime.Joined
       dockerfile: Dockerfile
@@ -36,7 +36,7 @@ services:
     
   # Party service & DB
   party:
-    image: partytimecontainerregistry.azurecr.io/party
+    #image: partytimecontainerregistry.azurecr.io/party
     build:
       context: .././Partytime.Party
       dockerfile: Dockerfile
@@ -97,6 +97,18 @@ services:
     networks:
       - Partytime
 
+  pgadmin-users-compose:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
+        PGADMIN_DEFAULT_PASSWORD: "test123!"
+    ports:
+        - "16545:80"
+    depends_on:
+        - userpostgresql
+    networks:
+      - Partytime  
+
   # Gateway
   apigateway:
     #image: partytimecontainerregistry.azurecr.io/authentication
@@ -132,6 +144,7 @@ volumes:
   joined:
   joinedpostgresql:
   authenticationwebapi:
-  #userpostgresql:
+  userpostgresql:
+  pgadmin-users-compose:
   rabbitmqdata:
   rabbitmq:
